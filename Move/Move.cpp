@@ -40,16 +40,21 @@ private:
         double X, Y;
         bool was = false;
     };
-public:
-    double X, Y; // координата Х, координата Y,
-    double Speed; // 0.1 - 1 скорость,
-    int Direction; // 0 - 359 направление.
-    Punch p1;
-    Punch p2;
-    bool Work = false;
 
-    bool Same(Point* other) {
-        return ((abs(other->X - X) < eps) && (abs(other->Y - Y) < eps));
+    int InWorkZone(double x, double y) {
+        if (x < 0.0) {
+            return 1;
+        }
+        if (x > 50000.0) {
+            return 2;
+        }
+        if (y < 0.0) {
+            return 3;
+        }
+        if (y > 1000.0) {
+            return 4;
+        }
+        return 0;
     }
 
     int InWork(double x, double y) {
@@ -104,6 +109,17 @@ public:
         return 0;
     }
 
+public:
+    double X, Y; // координата Х, координата Y,
+    double Speed; // 0.1 - 1 скорость,
+    int Direction; // 0 - 359 направление.
+    vector <Punch> v;
+    bool Work = false;
+
+    bool Same(Point* other) {
+        return ((abs(other->X - X) < eps) && (abs(other->Y - Y) < eps));
+    }
+
     void iteration() {
         CreateDirection();
         if (!Work && (Direction > 90 && Direction < 270)) {
@@ -133,6 +149,9 @@ public:
                     if (flag < 5) {
 
                     }
+                    else {
+
+                    }
                 }
             }
         }
@@ -145,6 +164,52 @@ public:
         }
     }
 
+    void step() {
+        CreateDirection();
+        if (Direction > 90 && Direction < 270) {
+            if (Direction > 180) {
+                Direction += 90;
+            }
+            else {
+                Direction -= 90;
+            }
+        }
+        auto [dx, dy] = Dif();
+
+        if (Work) { // Стенки
+            double new_x = X + dx, new_y = Y + dy;
+            int flag = InWorkZone(new_x, new_y);
+            while (!flag) {
+                Punch p;
+                if (flag == 1) {
+                    p.X = 0;
+                    p.Y = Y - (((new_y - Y) * X) / (new_x - X));
+                }
+                else {
+                    if (flag == 2) {
+                        p.X = 50000.0;
+                        p.Y = ((p.X - X) / (new_x - X)) * (new_y - Y) + Y;
+                    }
+                    else {
+                        if (flag == 3) {
+                            p.Y = 0;
+                            p.X = X - (Y * (new_x - X) / (new_y - Y));
+                        }
+                        else {
+                            p.Y = 1000.0;
+                            p.X = X + ((p.Y-Y) * (new_x - X) / (new_y - Y));
+                        }
+                    }
+                }
+                v.push_back(p);
+            }
+        }
+        else {
+
+        }
+    }
+
+
     Point(double x, double y) {
         X = x;
         Y = y;
@@ -152,8 +217,6 @@ public:
         random_device device;
         random_generator_.seed(device());
         CreateSpeed();
-        p1.was = false;
-        p2.was = false;
     }
 };
 
@@ -230,6 +293,7 @@ int main() {
     else {
         cout << "warning" << endl;
     }
-    in.close();
+    in_Point.close();
+    in_Traps.close();
 
 }
