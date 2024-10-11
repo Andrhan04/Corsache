@@ -33,6 +33,7 @@ private:
     void CreateCoord() {
         //uniform_int_distribution die{ -10, 10 };
         X = returnRandom(0, 1000);
+        X = -X;
         Y = returnRandom(0, 1000);
     }
     /*
@@ -78,7 +79,7 @@ public:
 };
 
 int main() {
-    ofstream Start("C:\\Corsace\\Sowing\\startPoints.txt");
+    ofstream Start("C:\\Corsache\\Sowing\\startPoints.txt");
     if (!Start.is_open()) return 0;
     int n = 1000, r = 0;
     vector<Point*> v;
@@ -106,7 +107,7 @@ int main() {
         v.push_back(p);
 
         Start << setprecision(3) << fixed << setw(8) << p->X << setw(8) << p->Y << setw(8) << endl;
-        //cout << setprecision(3) << fixed << setw(8) << p->X << setw(8) << p->Y << setw(8) << endl;
+        cout << setprecision(3) << fixed << setw(8) << p->X << setw(8) << p->Y << setw(8) << endl;
 
     }
     cout << r;
