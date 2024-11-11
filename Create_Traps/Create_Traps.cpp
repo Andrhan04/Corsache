@@ -1,4 +1,4 @@
-﻿#include <iomanip>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -7,6 +7,7 @@
 #include <fstream>
 #include <math.h>
 #include <random>
+#include <string>
 
 using namespace std;
 
@@ -25,21 +26,15 @@ private:
 	void CreateCoord() {
 		X = returnRandom(0, 50000);
 		Y = returnRandom(0, 1000);
-		if (returnRandom(0, 10) % 2) {
-			if (X < 25000) {
-				X = 0;
-			}
-			else {
-				X = 50000;
-			}
+		int p = returnRandom(0, 10) % 3;
+		if (p == 0) {
+			Y = 1000;
 		}
-		else {
-			if (Y < 500) {
-				Y = 0;
-			}
-			else {
-				Y = 1000;
-			}
+		if (p == 1) {
+			X = 50000;
+		}
+		if (p == 2) {
+			Y = 0;
 		}
 	}
 
@@ -67,9 +62,9 @@ public:
 
 int main()
 {
-	ofstream Start("C:\\Corsache\\Sowing\\startTraps.txt");
+	int n = 20000, r = 0;
+	ofstream Start("C:\\Coursace\\Coursace\\Sowing\\Traps\\start_" + to_string(n) + ".txt");
 	if (!Start.is_open()) return 0;
-	int n = 1000, r = 0;
 	vector<Trap*> v;
 	Start << "JSON\nTest2DStochastic" << endl;
 	Start << n << endl;
@@ -96,10 +91,12 @@ int main()
 		v.push_back(t);
 
 		Start << setprecision(3) << fixed << setw(10) << t->X << setw(10) << t->Y << endl;
-		cout << setprecision(3) << fixed << setw(10) << t->X << setw(10) << t->Y << endl;
-
+		//cout << setprecision(3) << fixed << setw(10) << t->X << setw(10) << t->Y << endl;
+		if (i % (n/100) == 0) {
+			cout << "Genered " << i / (n / 100) << " %" << endl;
+		}
 	}
-
+	cout << "Complete" << endl;
 
 	return 0;
 }

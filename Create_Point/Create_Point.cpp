@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <iomanip>
 #include <vector>
 #include <algorithm>
@@ -15,15 +15,6 @@ class Point {
 private:
     double eps = 1e-4;
     mt19937 random_generator_;
-    /*
-    pair <double, double> Dif() {
-        double Angle = Direction * acos(-1) / 180;
-        double x = (cos(Angle) * Speed);
-        double y = (sin(Angle) * Speed);
-        return { x,y };
-    }
-    */
-
     int returnRandom(int min, int max) {
         if (max < min) swap(max, min);
         std::uniform_int_distribution<int> range(min, max);
@@ -31,22 +22,10 @@ private:
     }
 
     void CreateCoord() {
-        //uniform_int_distribution die{ -10, 10 };
         X = returnRandom(0, 1000);
         X = -X;
         Y = returnRandom(0, 1000);
     }
-    /*
-    void CreateSpeed() {
-        //uniform_int_distribution die{ 0, 100 };
-        Speed = returnRandom(0,100) / 100.0;
-    }
-
-    void CreateDirection() {
-        //uniform_int_distribution die{ 0, 359 };
-        Direction = returnRandom(0,359);
-    }
-    */
 
 public:
     double X, Y; // 0 - 1000 координата Х, координата Y,
@@ -59,18 +38,7 @@ public:
 
     void Create() {
         CreateCoord();
-        //CreateSpeed();
-        //CreateDirection();
     }
-    /*
-    void iteration() {
-        pair<double, double> p = Dif();
-        X += p.first;
-        Y += p.second;
-        CreateSpeed();
-        CreateDirection();
-    }
-    */
     Point() {
         random_device device;
         random_generator_.seed(device());
